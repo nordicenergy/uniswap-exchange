@@ -1,0 +1,2 @@
+(this["webpackJsonpnordic_energy-uniswap"]=this["webpackJsonpnordic_energy-uniswap"]||[]).push([[14],{908:function(n,r,a){"use strict";a.r(r),a.d(r,"default",(function(){return u}));var e=a(0),i=a.n(e),t=a(835);function u(n){var r=n.initialCurrency,a=n.params;return i.a.createElement(t.a,{initialCurrency:r,params:a})}}}]);
+//# sourceMappingURL=14.abd5a5a6.chunk.js.map
