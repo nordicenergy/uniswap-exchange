@@ -1,9 +1,5 @@
 [![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/nordicenergy/uniswap-exchange) 
 
-[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/nordicenergy/uniswap-exchange) 
-
-[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/nordicenergy/uniswap-exchange) 
-
 # Nordic Energy - Uniswap Exchange Frontend
 
 ####  Nordic Energy´s Uniswap a protocol for automated token exchange on Ethereum (ERC-20) and Nordic Energy Tokens.
