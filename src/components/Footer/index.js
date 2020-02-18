@@ -26,14 +26,12 @@ const Title = styled.div`
   display: flex;
   align-items: center;
   color: ${({ theme }) => theme.uniswapPink};
-
   :hover {
     cursor: pointer;
   }
   #link {
     text-decoration-color: ${({ theme }) => theme.uniswapPink};
   }
-
   #title {
     display: inline;
     font-size: 0.825rem;
@@ -48,12 +46,10 @@ const Title = styled.div`
 
 const StyledToggle = styled(Toggle)`
   margin-right: 24px;
-
   .react-switch-bg[style] {
     background-color: ${({ theme }) => darken(0.05, theme.inputBackground)} !important;
     border: 1px solid ${({ theme }) => theme.concreteGray} !important;
   }
-
   .react-switch-handle[style] {
     background-color: ${({ theme }) => theme.inputBackground};
     box-shadow: 0 4px 8px 0 ${({ theme }) => transparentize(0.93, theme.shadowColor)};
@@ -78,10 +74,10 @@ export default function Footer() {
     <FooterFrame>
       <FooterElement>
         <Title>
-          <Link id="link" href="https://Uniswap.nordicenergy.co/about/">
+          <Link id="link" href="https://uniswap.nordicenergy.co/">
             <h1 id="title">About</h1>
           </Link>
-          <Link id="link" href="https://Uniswap.nordicenergy.co//docs/">
+          <Link id="link" href="https://docs.uniswap.nordicenergy.co/">
             <h1 id="title">Docs</h1>
           </Link>
           <Link id="link" href="https://github.com/nordicenergy/uniswap-exchange">
@@ -89,6 +85,8 @@ export default function Footer() {
           </Link>
         </Title>
       </FooterElement>
+
+      <StyledToggle
         checked={!isDark}
         uncheckedIcon={
           <EmojiToggle role="img" aria-label="moon">

@@ -11,8 +11,8 @@ This site will serve as a project overview for Uniswap - explaining how it works
 An open source interface for Uniswap - a protocol for decentralized exchange of Ethereum and Nordic Energy tokens of Ecosystem.
 
 Website: https://uniswap.nordicenergy.co
-Docs: https://uniswap.nordicenergy.co/docs
-Email: contact@Uniswap.nordicenergy.co
+Docs: https://docs.uniswap.nordicenergy.co
+Email: contact@uniswap.nordicenergy.co
 Whitepaper: Link
 
 ## Features:
