@@ -1,4 +1,3 @@
-  
 import { Connectors } from 'web3-react'
 const { Connector, ErrorCodeMixin } = Connectors
 
