@@ -591,6 +591,18 @@ export const INITIAL_TOKENS_CONTEXT = {
       [SYMBOL]: 'ZRX',
       [DECIMALS]: 18,
       [EXCHANGE_ADDRESS]: '0xaE76c84C9262Cdb9abc0C2c8888e62Db8E22A0bF'
+    },
+    '0x4D0A4C762BD7f742096DAAF5911dcf9C94b9ea95': {
+      [NAME]: 'Nordic Energy Token',
+      [SYMBOL]:'NET',
+      [DECIMALS]: 8,
+      [EXCHANGE_ADDRESS]: '0x1383b6EFe917e2BB5d80a55a8B1A81f360eD06bd'
+    },
+    '0x7a284cfdf03d3bbf023c733875ffa780860ca00a': {
+      [NAME]: 'Nordic Energy Coin',
+      [SYMBOL]: 'NESC',
+      [DECIMALS]: 18,
+      [EXCHANGE_ADDRESS]: '0xB0e579c76D85e3814B3F17A4229c39d4fE53bA7f'
     }
   },
   4: {
