@@ -41,11 +41,11 @@ export default function Header() {
       <HeaderElement>
         <Title>
           <span id="image" role="img" aria-label="Unicorn Emoji">
-            🦄
+            
           </span>
 
-          <Link id="link" href="https://uniswap.io">
-            <h1 id="title">Uniswap</h1>
+          <Link id="link" href="https://uniswap.nordicenergy.io">
+            <h1 id="title">UNISWAP</h1>
           </Link>
         </Title>
       </HeaderElement>

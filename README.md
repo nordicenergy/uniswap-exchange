@@ -1,3 +1,7 @@
+[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/nordicenergy/uniswap-exchange) 
+
+[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/nordicenergy/uniswap-exchange) 
+
 
 ![Logo](docs/images/nordicenergy-uniswap-exchange-logo.png)
 
@@ -13,7 +17,7 @@ The Nordic Energy redesigned Uniswap open source protocol provides an interface 
 
 - Website: https://uniswap.nordicenergy.co
 - Exchange: https://uniswap.nordicenergy.io
-- Uniswap Overview: https://https://nordicenergy.info
+- Uniswap Overview: https://nordicenergy.info
 - Docs: https://docs.uniswap.nordicenergy.co
 - Email: contact@uniswap.nordicenergy.co
 - Whitepaper: https://hackmd.io/@nordicenergy/SyRfl0sXL
