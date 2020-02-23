@@ -1,7 +1,7 @@
 # Table of contents
 
 * [Introduction](README.md)
-* [About](get-started.md)
+* [About](about.md)
 
 ## SDK Documentation
 
@@ -17,10 +17,10 @@
 ## Frontend Integration
 
 * [Connect to Uniswap](frontend-integration/connect-to-uniswap.md)
-* [Pool Liquidity](frontend-integration/pool.md)
-* [Trade tokens](frontend-integration/swap.md)
-* [Custom Linking](frontend-integration/linking.md)
-* [iFrame integration](frontend-integration/iframe.md)
+* [Pool Liquidity](frontend-integration/pool-liquidity.md)
+* [Trade tokens](frontend-integration/trade-tokens.md)
+* [Custom Linking](frontend-integration/custom-linking.md)
+* [iFrame integration](frontend-integration/iframe-integration.md)
 * [Token listing](frontend-integration/token-listing.md)
 
 ## Smart Contract Interaction
