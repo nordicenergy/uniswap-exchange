@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useReducer, useMemo, useCallback, useEffect } from 'react'
+import { useWeb3Context } from 'web3-react'
 
-import { useWeb3React } from '../hooks'
 import { safeAccess } from '../utils'
 import { useBlockNumber } from './Application'
 
@@ -103,15 +103,15 @@ export default function Provider({ children }) {
 }
 
 export function Updater() {
-  const { chainId, library } = useWeb3React()
+  const { networkId, library } = useWeb3Context()
 
   const globalBlockNumber = useBlockNumber()
 
   const [state, { check, finalize }] = useTransactionsContext()
-  const allTransactions = safeAccess(state, [chainId]) || {}
+  const allTransactions = safeAccess(state, [networkId]) || {}
 
   useEffect(() => {
-    if ((chainId || chainId === 0) && library) {
+    if ((networkId || networkId === 0) && library) {
       let stale = false
       Object.keys(allTransactions)
         .filter(
@@ -123,14 +123,14 @@ export function Updater() {
             .then(receipt => {
               if (!stale) {
                 if (!receipt) {
-                  check(chainId, hash, globalBlockNumber)
+                  check(networkId, hash, globalBlockNumber)
                 } else {
-                  finalize(chainId, hash, receipt)
+                  finalize(networkId, hash, receipt)
                 }
               }
             })
             .catch(() => {
-              check(chainId, hash, globalBlockNumber)
+              check(networkId, hash, globalBlockNumber)
             })
         })
 
@@ -138,20 +138,20 @@ export function Updater() {
         stale = true
       }
     }
-  }, [chainId, library, allTransactions, globalBlockNumber, check, finalize])
+  }, [networkId, library, allTransactions, globalBlockNumber, check, finalize])
 
   return null
 }
 
 export function useTransactionAdder() {
-  const { chainId } = useWeb3React()
+  const { networkId } = useWeb3Context()
 
   const [, { add }] = useTransactionsContext()
 
   return useCallback(
     (response, customData = {}) => {
-      if (!(chainId || chainId === 0)) {
-        throw Error(`Invalid networkId '${chainId}`)
+      if (!(networkId || networkId === 0)) {
+        throw Error(`Invalid networkId '${networkId}`)
       }
 
       const hash = safeAccess(response, ['hash'])
@@ -159,18 +159,18 @@ export function useTransactionAdder() {
       if (!hash) {
         throw Error('No transaction hash found.')
       }
-      add(chainId, hash, { ...response, [CUSTOM_DATA]: customData })
+      add(networkId, hash, { ...response, [CUSTOM_DATA]: customData })
     },
-    [chainId, add]
+    [networkId, add]
   )
 }
 
 export function useAllTransactions() {
-  const { chainId } = useWeb3React()
+  const { networkId } = useWeb3Context()
 
   const [state] = useTransactionsContext()
 
-  return safeAccess(state, [chainId]) || {}
+  return safeAccess(state, [networkId]) || {}
 }
 
 export function usePendingApproval(tokenAddress) {

@@ -1,19 +1,20 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import ReactGA from 'react-ga'
-import { createBrowserHistory } from 'history'
+import { useWeb3Context } from 'web3-react'
 import { ethers } from 'ethers'
 import styled from 'styled-components'
 
-import { useWeb3React, useExchangeContract } from '../../hooks'
 import { Button } from '../../theme'
 import CurrencyInputPanel from '../../components/CurrencyInputPanel'
 import ContextualInfo from '../../components/ContextualInfo'
 import OversizedPanel from '../../components/OversizedPanel'
-import ArrowDown from '../../assets/svg/SVGArrowDown'
+import ArrowDownBlue from '../../assets/images/arrow-down-blue.svg'
+import ArrowDownGrey from '../../assets/images/arrow-down-grey.svg'
+import { useExchangeContract } from '../../hooks'
 import { useTransactionAdder } from '../../contexts/Transactions'
 import { useTokenDetails } from '../../contexts/Tokens'
-import { useAddressBalance, useETHPriceInUSD } from '../../contexts/Balances'
+import { useAddressBalance } from '../../contexts/Balances'
 import { calculateGasMargin, amountFormatter } from '../../utils'
 
 // denominated in bips
@@ -35,9 +36,7 @@ const DownArrowBackground = styled.div`
   align-items: center;
 `
 
-const DownArrow = styled(ArrowDown)`
-  ${({ theme }) => theme.flexRowNoWrap}
-  color: ${({ theme, active }) => (active ? theme.royalBlue : theme.doveGray)};
+const DownArrow = styled.img`
   width: 0.625rem;
   height: 0.625rem;
   position: relative;
@@ -81,7 +80,7 @@ const ExchangeRateWrapper = styled.div`
 const ExchangeRate = styled.span`
   flex: 1 1 auto;
   width: 0;
-  color: ${({ theme }) => theme.doveGray};
+  color: ${({ theme }) => theme.chaliceGray};
 `
 
 const Flex = styled.div`
@@ -139,20 +138,14 @@ function calculateSlippageBounds(value) {
   }
 }
 
-export default function RemoveLiquidity({ params }) {
+export default function RemoveLiquidity() {
+  const { library, account, active } = useWeb3Context()
   const { t } = useTranslation()
-  const { library, account, active } = useWeb3React()
 
   const addTransaction = useTransactionAdder()
 
-  // clear url of query
-  useEffect(() => {
-    const history = createBrowserHistory()
-    history.push(window.location.pathname + '')
-  }, [])
-
-  const [outputCurrency, setOutputCurrency] = useState(params.poolTokenAddress)
-  const [value, setValue] = useState(params.poolTokenAmount ? params.poolTokenAmount : '')
+  const [outputCurrency, setOutputCurrency] = useState('')
+  const [value, setValue] = useState('')
   const [inputError, setInputError] = useState()
   const [valueParsed, setValueParsed] = useState()
   // parse value
@@ -244,17 +237,10 @@ export default function RemoveLiquidity({ params }) {
     }
   }, [fetchPoolTokens, library])
 
-  // BigNumber.js instance
-  const ethPrice = useETHPriceInUSD()
-
   async function onRemoveLiquidity() {
-    // take ETH amount, multiplied by ETH rate and 2 for total tx size
-    let usdTransactionSize = ethPrice * (ethWithdrawn / 1e18) * 2
     ReactGA.event({
-      category: 'Transaction',
-      action: 'Remove Liquidity',
-      label: outputCurrency,
-      value: usdTransactionSize
+      category: 'Pool',
+      action: 'RemoveLiquidity'
     })
 
     const deadline = Math.ceil(Date.now() / 1000) + DEADLINE_FROM_NOW
@@ -278,6 +264,11 @@ export default function RemoveLiquidity({ params }) {
   const b = text => <BlueSpan>{text}</BlueSpan>
 
   function renderTransactionDetails() {
+    ReactGA.event({
+      category: 'TransactionDetail',
+      action: 'Open'
+    })
+
     return (
       <div>
         <div>
@@ -356,7 +347,7 @@ export default function RemoveLiquidity({ params }) {
       />
       <OversizedPanel>
         <DownArrowBackground>
-          <DownArrow active={isActive} alt="arrow" />
+          <DownArrow src={isActive ? ArrowDownBlue : ArrowDownGrey} alt="arrow" />
         </DownArrowBackground>
       </OversizedPanel>
       <CurrencyInputPanel
@@ -389,7 +380,7 @@ export default function RemoveLiquidity({ params }) {
           </ExchangeRateWrapper>
           <ExchangeRateWrapper>
             <ExchangeRate>{t('currentPoolSize')}</ExchangeRate>
-            {exchangeETHBalance && exchangeTokenBalance && (decimals || decimals === 0) ? (
+            {exchangeETHBalance && exchangeTokenBalance && decimals ? (
               <span>{`${amountFormatter(exchangeETHBalance, 18, 4)} ETH + ${amountFormatter(
                 exchangeTokenBalance,
                 decimals,

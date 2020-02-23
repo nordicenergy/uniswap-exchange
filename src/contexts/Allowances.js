@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useReducer, useMemo, useCallback, useEffect } from 'react'
-import {} from '@web3-react/core'
+import { useWeb3Context } from 'web3-react'
 
-import { useWeb3React } from '../hooks'
 import { safeAccess, isAddress, getTokenAllowance } from '../utils'
 import { useBlockNumber } from './Application'
 
@@ -44,17 +43,7 @@ export default function Provider({ children }) {
   const [state, dispatch] = useReducer(reducer, {})
 
   const update = useCallback((networkId, address, tokenAddress, spenderAddress, value, blockNumber) => {
-    dispatch({
-      type: UPDATE,
-      payload: {
-        networkId,
-        address,
-        tokenAddress,
-        spenderAddress,
-        value,
-        blockNumber
-      }
-    })
+    dispatch({ type: UPDATE, payload: { networkId, address, tokenAddress, spenderAddress, value, blockNumber } })
   }, [])
 
   return (
@@ -65,12 +54,12 @@ export default function Provider({ children }) {
 }
 
 export function useAddressAllowance(address, tokenAddress, spenderAddress) {
-  const { library, chainId } = useWeb3React()
+  const { networkId, library } = useWeb3Context()
 
   const globalBlockNumber = useBlockNumber()
 
   const [state, { update }] = useAllowancesContext()
-  const { value, blockNumber } = safeAccess(state, [chainId, address, tokenAddress, spenderAddress]) || {}
+  const { value, blockNumber } = safeAccess(state, [networkId, address, tokenAddress, spenderAddress]) || {}
 
   useEffect(() => {
     if (
@@ -78,7 +67,7 @@ export function useAddressAllowance(address, tokenAddress, spenderAddress) {
       isAddress(tokenAddress) &&
       isAddress(spenderAddress) &&
       (value === undefined || blockNumber !== globalBlockNumber) &&
-      (chainId || chainId === 0) &&
+      (networkId || networkId === 0) &&
       library
     ) {
       let stale = false
@@ -86,12 +75,12 @@ export function useAddressAllowance(address, tokenAddress, spenderAddress) {
       getTokenAllowance(address, tokenAddress, spenderAddress, library)
         .then(value => {
           if (!stale) {
-            update(chainId, address, tokenAddress, spenderAddress, value, globalBlockNumber)
+            update(networkId, address, tokenAddress, spenderAddress, value, globalBlockNumber)
           }
         })
         .catch(() => {
           if (!stale) {
-            update(chainId, address, tokenAddress, spenderAddress, null, globalBlockNumber)
+            update(networkId, address, tokenAddress, spenderAddress, null, globalBlockNumber)
           }
         })
 
@@ -99,7 +88,7 @@ export function useAddressAllowance(address, tokenAddress, spenderAddress) {
         stale = true
       }
     }
-  }, [address, tokenAddress, spenderAddress, value, blockNumber, globalBlockNumber, chainId, library, update])
+  }, [address, tokenAddress, spenderAddress, value, blockNumber, globalBlockNumber, networkId, library, update])
 
   return value
 }

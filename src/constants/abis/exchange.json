@@ -97,7 +97,7 @@
   },
   { "name": "__default__", "outputs": [], "inputs": [], "constant": false, "payable": true, "type": "function" },
   {
-    "name": "ethToUniswapInput",
+    "name": "ethToTokenSwapInput",
     "outputs": [{ "type": "uint256", "name": "out" }],
     "inputs": [{ "type": "uint256", "name": "min_tokens" }, { "type": "uint256", "name": "deadline" }],
     "constant": false,
@@ -119,7 +119,7 @@
     "gas": 12965
   },
   {
-    "name": "ethToUniswapOutput",
+    "name": "ethToTokenSwapOutput",
     "outputs": [{ "type": "uint256", "name": "out" }],
     "inputs": [{ "type": "uint256", "name": "tokens_bought" }, { "type": "uint256", "name": "deadline" }],
     "constant": false,
@@ -195,7 +195,7 @@
     "gas": 50384
   },
   {
-    "name": "tokenToUniswapInput",
+    "name": "tokenToTokenSwapInput",
     "outputs": [{ "type": "uint256", "name": "out" }],
     "inputs": [
       { "type": "uint256", "name": "tokens_sold" },
@@ -226,7 +226,7 @@
     "gas": 51098
   },
   {
-    "name": "tokenToUniswapOutput",
+    "name": "tokenToTokenSwapOutput",
     "outputs": [{ "type": "uint256", "name": "out" }],
     "inputs": [
       { "type": "uint256", "name": "tokens_bought" },

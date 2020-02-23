@@ -1,28 +1,20 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { isAddress } from '../../utils'
 
 import { ReactComponent as EthereumLogo } from '../../assets/images/ethereum-logo.svg'
 
-const TOKEN_ICON_API = address =>
-  `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${isAddress(
-    address
-  )}/logo.png`
+const TOKEN_ICON_API = 'https://raw.githubusercontent.com/TrustWallet/tokens/master/tokens'
 const BAD_IMAGES = {}
 
 const Image = styled.img`
   width: ${({ size }) => size};
   height: ${({ size }) => size};
-  background-color: white;
   border-radius: 1rem;
 `
 
 const Emoji = styled.span`
-  display: flex;
-  align-items: center;
-  justify-content: center;
   width: ${({ size }) => size};
-  height: ${({ size }) => size};
+  font-size: ${({ size }) => size};
 `
 
 const StyledEthereumLogo = styled(EthereumLogo)`
@@ -37,10 +29,10 @@ export default function TokenLogo({ address, size = '1rem', ...rest }) {
   if (address === 'ETH') {
     return <StyledEthereumLogo size={size} />
   } else if (!error && !BAD_IMAGES[address]) {
-    path = TOKEN_ICON_API(address.toLowerCase())
+    path = `${TOKEN_ICON_API}/${address.toLowerCase()}.png`
   } else {
     return (
-      <Emoji {...rest} size={size}>
+      <Emoji {...rest}>
         <span role="img" aria-label="Thinking">
           🤔
         </span>
