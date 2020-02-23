@@ -2,9 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import ReactGA from 'react-ga'
-import { ReactComponent as Dropup } from '../../assets/images/dropup-blue.svg'
-import { ReactComponent as Dropdown } from '../../assets/images/dropdown-blue.svg'
+import DropdownBlue from '../../assets/images/dropdown-blue.svg'
+import DropupBlue from '../../assets/images/dropup-blue.svg'
 
 const SummaryWrapper = styled.div`
   color: ${({ error, theme }) => (error ? theme.salmonRed : theme.doveGray)};
@@ -43,20 +42,6 @@ const SummaryWrapperContainer = styled.div`
   }
 `
 
-const WrappedDropup = ({ isError, highSlippageWarning, ...rest }) => <Dropup {...rest} />
-const ColoredDropup = styled(WrappedDropup)`
-  path {
-    stroke: ${({ theme }) => theme.royalBlue};
-  }
-`
-
-const WrappedDropdown = ({ isError, highSlippageWarning, ...rest }) => <Dropdown {...rest} />
-const ColoredDropdown = styled(WrappedDropdown)`
-  path {
-    stroke: ${({ theme }) => theme.royalBlue};
-  }
-`
-
 class ContextualInfo extends Component {
   static propTypes = {
     openDetailsText: PropTypes.string,
@@ -66,8 +51,8 @@ class ContextualInfo extends Component {
   }
 
   static defaultProps = {
-    openDetailsText: 'Advanced Details',
-    closeDetailsText: 'Hide Advanced',
+    openDetailsText: 'Transaction Details',
+    closeDetailsText: 'Hide Details',
     renderTransactionDetails() {},
     contextualInfo: '',
     isError: false
@@ -95,27 +80,21 @@ class ContextualInfo extends Component {
     return (
       <>
         <SummaryWrapperContainer
-          onClick={() => {
-            !this.state.showDetails &&
-              ReactGA.event({
-                category: 'Advanced Interaction',
-                action: 'Open Advanced Details',
-                label: 'Pool Page Details'
-              })
+          onClick={() =>
             this.setState(prevState => {
               return { showDetails: !prevState.showDetails }
             })
-          }}
+          }
         >
           {!this.state.showDetails ? (
             <>
               <span>{openDetailsText}</span>
-              <ColoredDropup />
+              <img src={DropdownBlue} alt="dropdown" />
             </>
           ) : (
             <>
               <span>{closeDetailsText}</span>
-              <ColoredDropdown />
+              <img src={DropupBlue} alt="dropup" />
             </>
           )}
         </SummaryWrapperContainer>

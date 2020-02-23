@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { withRouter } from 'react-router'
-import { createBrowserHistory } from 'history'
+import { useWeb3Context } from 'web3-react'
 import { ethers } from 'ethers'
 import styled from 'styled-components'
 import { useTranslation } from 'react-i18next'
 import ReactGA from 'react-ga'
 
-import { useWeb3React, useFactoryContract } from '../../hooks'
 import { Button } from '../../theme'
 import AddressInputPanel from '../../components/AddressInputPanel'
 import OversizedPanel from '../../components/OversizedPanel'
+import { useFactoryContract } from '../../hooks'
 import { useTokenDetails } from '../../contexts/Tokens'
 import { useTransactionAdder } from '../../contexts/Transactions'
 
@@ -29,7 +29,7 @@ const ExchangeRateWrapper = styled.div`
 const ExchangeRate = styled.span`
   flex: 1 1 auto;
   width: 0;
-  color: ${({ theme }) => theme.doveGray};
+  color: ${({ theme }) => theme.chaliceGray};
 `
 
 const CreateExchangeWrapper = styled.div`
@@ -54,14 +54,13 @@ const Flex = styled.div`
   }
 `
 
-function CreateExchange({ location, params }) {
+function CreateExchange({ history, location }) {
   const { t } = useTranslation()
-  const { account } = useWeb3React()
-
+  const { account } = useWeb3Context()
   const factory = useFactoryContract()
 
   const [tokenAddress, setTokenAddress] = useState({
-    address: params.tokenAddress ? params.tokenAddress : '',
+    address: '',
     name: ''
   })
   const [tokenAddressError, setTokenAddressError] = useState()
@@ -69,11 +68,12 @@ function CreateExchange({ location, params }) {
   const { name, symbol, decimals, exchangeAddress } = useTokenDetails(tokenAddress.address)
   const addTransaction = useTransactionAdder()
 
-  // clear url of query
+  // clear location state, if it exists
   useEffect(() => {
-    const history = createBrowserHistory()
-    history.push(window.location.pathname + '')
-  }, [])
+    if (location.state) {
+      history.replace(location.pathname)
+    }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   // validate everything
   const [errorMessage, setErrorMessage] = useState(!account && t('noWallet'))
@@ -104,8 +104,8 @@ function CreateExchange({ location, params }) {
 
     factory.createExchange(tokenAddress.address, { gasLimit: estimatedGasLimit }).then(response => {
       ReactGA.event({
-        category: 'Transaction',
-        action: 'Create Exchange'
+        category: 'Pool',
+        action: 'CreateExchange'
       })
 
       addTransaction(response)
@@ -118,11 +118,7 @@ function CreateExchange({ location, params }) {
     <>
       <AddressInputPanel
         title={t('tokenAddress')}
-        initialInput={
-          params.tokenAddress
-            ? { address: params.tokenAddress }
-            : { address: (location.state && location.state.tokenAddress) || '' }
-        }
+        initialInput={(location.state && location.state.tokenAddress) || ''}
         onChange={setTokenAddress}
         onError={setTokenAddressError}
       />
