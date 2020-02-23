@@ -14,7 +14,7 @@ The Nordic Energy redesigned Uniswap open source protocol provides an interface 
 - Website: https://uniswap.nordicenergy.co
 - Exchange: https://uniswap.nordicenergy.io
 - Uniswap Overview: https://https://nordicenergy.info
-- Docs: https://docs.uniswap.nordicenergy.co
+- Docs: https://drive.google.com/file/d/1tCliiTc0OMEbOcEslzEJrdAJIHCn_JqF/view?usp=sharing
 - Email: contact@uniswap.nordicenergy.co
 - Whitepaper: https://hackmd.io/@nordicenergy/SyRfl0sXL
 
