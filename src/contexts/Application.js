@@ -1,14 +1,12 @@
 import React, { createContext, useContext, useReducer, useMemo, useCallback, useEffect } from 'react'
-
-import { useWeb3React } from '../hooks'
+import { useWeb3Context } from 'web3-react'
 import { safeAccess } from '../utils'
 
-const BLOCK_NUMBER = 'BLOCK_NUMBER'
-const USD_PRICE = 'USD_PRICE'
-const WALLET_MODAL_OPEN = 'WALLET_MODAL_OPEN'
+const SHOW_BETA_MESSAGE = 'SHOW_BETA_MESSAGE'
+const BLOCK_NUMBERS = 'BLOCK_NUMBERS'
 
+const DISMISS_BETA_MESSAGE = 'DISMISS_BETA_MESSAGE'
 const UPDATE_BLOCK_NUMBER = 'UPDATE_BLOCK_NUMBER'
-const TOGGLE_WALLET_MODAL = 'TOGGLE_WALLET_MODAL'
 
 const ApplicationContext = createContext()
 
@@ -18,19 +16,21 @@ function useApplicationContext() {
 
 function reducer(state, { type, payload }) {
   switch (type) {
+    case DISMISS_BETA_MESSAGE: {
+      return {
+        ...state,
+        [SHOW_BETA_MESSAGE]: false
+      }
+    }
     case UPDATE_BLOCK_NUMBER: {
       const { networkId, blockNumber } = payload
       return {
         ...state,
-        [BLOCK_NUMBER]: {
-          ...(safeAccess(state, [BLOCK_NUMBER]) || {}),
+        [BLOCK_NUMBERS]: {
+          ...(safeAccess(state, [BLOCK_NUMBERS]) || {}),
           [networkId]: blockNumber
         }
       }
-    }
-
-    case TOGGLE_WALLET_MODAL: {
-      return { ...state, [WALLET_MODAL_OPEN]: !state[WALLET_MODAL_OPEN] }
     }
     default: {
       throw Error(`Unexpected action type in ApplicationContext reducer: '${type}'.`)
@@ -40,28 +40,23 @@ function reducer(state, { type, payload }) {
 
 export default function Provider({ children }) {
   const [state, dispatch] = useReducer(reducer, {
-    [BLOCK_NUMBER]: {},
-    [USD_PRICE]: {},
-    [WALLET_MODAL_OPEN]: false
+    [SHOW_BETA_MESSAGE]: true,
+    [BLOCK_NUMBERS]: {}
   })
 
-  const updateBlockNumber = useCallback((networkId, blockNumber) => {
-    dispatch({
-      type: UPDATE_BLOCK_NUMBER,
-      payload: { networkId, blockNumber }
-    })
+  const dismissBetaMessage = useCallback(() => {
+    dispatch({ type: DISMISS_BETA_MESSAGE })
   }, [])
-
-  const toggleWalletModal = useCallback(() => {
-    dispatch({ type: TOGGLE_WALLET_MODAL })
+  const updateBlockNumber = useCallback((networkId, blockNumber) => {
+    dispatch({ type: UPDATE_BLOCK_NUMBER, payload: { networkId, blockNumber } })
   }, [])
 
   return (
     <ApplicationContext.Provider
-      value={useMemo(() => [state, { updateBlockNumber, toggleWalletModal }], [
+      value={useMemo(() => [state, { dismissBetaMessage, updateBlockNumber }], [
         state,
-        updateBlockNumber,
-        toggleWalletModal
+        dismissBetaMessage,
+        updateBlockNumber
       ])}
     >
       {children}
@@ -70,13 +65,12 @@ export default function Provider({ children }) {
 }
 
 export function Updater() {
-  const { library, chainId } = useWeb3React()
+  const { networkId, library } = useWeb3Context()
 
   const [, { updateBlockNumber }] = useApplicationContext()
 
-  // update block number
   useEffect(() => {
-    if (library) {
+    if ((networkId || networkId === 0) && library) {
       let stale = false
 
       function update() {
@@ -84,12 +78,12 @@ export function Updater() {
           .getBlockNumber()
           .then(blockNumber => {
             if (!stale) {
-              updateBlockNumber(chainId, blockNumber)
+              updateBlockNumber(networkId, blockNumber)
             }
           })
           .catch(() => {
             if (!stale) {
-              updateBlockNumber(chainId, null)
+              updateBlockNumber(networkId, null)
             }
           })
       }
@@ -102,27 +96,21 @@ export function Updater() {
         library.removeListener('block', update)
       }
     }
-  }, [chainId, library, updateBlockNumber])
+  }, [networkId, library, updateBlockNumber])
 
   return null
 }
 
+export function useBetaMessageManager() {
+  const [state, { dismissBetaMessage }] = useApplicationContext()
+
+  return [safeAccess(state, [SHOW_BETA_MESSAGE]), dismissBetaMessage]
+}
+
 export function useBlockNumber() {
-  const { chainId } = useWeb3React()
+  const { networkId } = useWeb3Context()
 
   const [state] = useApplicationContext()
 
-  return safeAccess(state, [BLOCK_NUMBER, chainId])
-}
-
-export function useWalletModalOpen() {
-  const [state] = useApplicationContext()
-
-  return state[WALLET_MODAL_OPEN]
-}
-
-export function useWalletModalToggle() {
-  const [, { toggleWalletModal }] = useApplicationContext()
-
-  return toggleWalletModal
+  return safeAccess(state, [BLOCK_NUMBERS, networkId])
 }

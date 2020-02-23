@@ -4,12 +4,9 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import OversizedPanel from '../../components/OversizedPanel'
-import { ReactComponent as Dropdown } from '../../assets/images/dropdown-blue.svg'
-
+import Dropdown from '../../assets/images/dropdown-blue.svg'
 import Modal from '../../components/Modal'
 import { useBodyKeyDown } from '../../hooks'
-
-import { lighten } from 'polished'
 
 const poolTabOrder = [
   {
@@ -32,15 +29,12 @@ const poolTabOrder = [
 const LiquidityContainer = styled.div`
   ${({ theme }) => theme.flexRowNoWrap};
   align-items: center;
-  padding: 1rem 1rem;
-  font-size: 1rem;
+  font-size: 0.75rem;
+  padding: 0.625rem 1rem;
+  font-size: 0.75rem;
   color: ${({ theme }) => theme.royalBlue};
   font-weight: 500;
   cursor: pointer;
-
-  :hover {
-    color: ${({ theme }) => lighten(0.1, theme.royalBlue)};
-  }
 
   img {
     height: 0.75rem;
@@ -68,26 +62,19 @@ const StyledNavLink = styled(NavLink).attrs({
   font-size: 1rem;
 
   &.${activeClassName} {
-    background-color: ${({ theme }) => theme.inputBackground};
+    background-color: ${({ theme }) => theme.white};
     border-radius: 3rem;
-    border: 1px solid ${({ theme }) => theme.mercuryGray};
+    box-shadow: 0 0 0.5px 0.5px ${({ theme }) => theme.mercuryGray};
     font-weight: 500;
     color: ${({ theme }) => theme.royalBlue};
   }
 `
 
 const PoolModal = styled.div`
-  background-color: ${({ theme }) => theme.inputBackground};
+  background-color: ${({ theme }) => theme.white};
   width: 100%;
   height: 100%;
   padding: 2rem 0 2rem 0;
-`
-
-const WrappedDropdown = ({ isError, highSlippageWarning, ...rest }) => <Dropdown {...rest} />
-const ColoredDropdown = styled(WrappedDropdown)`
-  path {
-    stroke: ${({ theme }) => theme.royalBlue};
-  }
 `
 
 function ModeSelector({ location: { pathname }, history }) {
@@ -122,14 +109,14 @@ function ModeSelector({ location: { pathname }, history }) {
         }}
       >
         <LiquidityLabel>{t(activeTabKey)}</LiquidityLabel>
-        <ColoredDropdown alt="arrow down" />
+        <img src={Dropdown} alt="dropdown" />
       </LiquidityContainer>
       <Modal
         isOpen={modalIsOpen}
-        maxHeight={50}
         onDismiss={() => {
           setModalIsOpen(false)
         }}
+        minHeight={null}
       >
         <PoolModal>
           {poolTabOrder.map(({ path, textKey, regex }) => (

@@ -1,8 +1,5 @@
-import React, { useEffect } from 'react'
-import { createGlobalStyle, css, ThemeProvider as StyledComponentsThemeProvider } from 'styled-components'
-import { checkSupportedTheme, getQueryParam } from '../utils'
-import { SUPPORTED_THEMES } from '../constants'
-import { useDarkModeManager } from '../contexts/LocalStorage'
+import React from 'react'
+import { ThemeProvider as StyledComponentsThemeProvider, createGlobalStyle, css } from 'styled-components'
 
 export * from './components'
 
@@ -21,92 +18,61 @@ const mediaWidthTemplates = Object.keys(MEDIA_WIDTHS).reduce((accumulator, size)
   return accumulator
 }, {})
 
-const white = '#FFFFFF'
-const black = '#000000'
+const mediaHeightTemplates = Object.keys(MEDIA_WIDTHS).reduce((accumulator, size) => {
+  accumulator[size] = (...args) => css`
+    @media (max-height: ${MEDIA_WIDTHS[size] / (16 / 9)}px) {
+      ${css(...args)}
+    }
+  `
+  return accumulator
+}, {})
 
-export default function ThemeProvider({ children }) {
-  const [darkMode, toggleDarkMode] = useDarkModeManager()
-  const themeURL = checkSupportedTheme(getQueryParam(window.location, 'theme'))
-  const themeToRender = themeURL
-    ? themeURL.toUpperCase() === SUPPORTED_THEMES.DARK
-      ? true
-      : themeURL.toUpperCase() === SUPPORTED_THEMES.LIGHT
-      ? false
-      : darkMode
-    : darkMode
-  useEffect(() => {
-    toggleDarkMode(themeToRender)
-  }, [toggleDarkMode, themeToRender])
-  return <StyledComponentsThemeProvider theme={theme(themeToRender)}>{children}</StyledComponentsThemeProvider>
-}
+const flexColumnNoWrap = css`
+  display: flex;
+  flex-flow: column nowrap;
+`
 
-const theme = darkMode => ({
-  white,
-  black,
-  textColor: darkMode ? white : ' #0d0d0d',
-  greyText: darkMode ? white : '#f2f2f2',
+const flexRowNoWrap = css`
+  display: flex;
+  flex-flow: row nowrap;
+`
 
-  // for setting css on <html>
-  backgroundColor: darkMode ? ' #18191b' : white,
-
-  modalBackground: darkMode ? 'rgba(255, 204, 0)' : 'rgba(230, 184, 0)',
-  inputBackground: darkMode ? '#18191b' : white,
-  placeholderGray: darkMode ? '#d9d9d9' : '#f2f2f2',
-  shadowColor: darkMode ? '#000' : '#E6B800',
-
+const theme = {
+  white: '#FFFFFF',
+  black: '#000000',
   // grays
-  concreteGray: darkMode ? '#333333' : '#fafafa',
-  mercuryGray: darkMode ? '#333333' : ' #f2f2f2',
-  silverGray: darkMode ? '#737373' : ' #b3b3b3',
-  chaliceGray: darkMode ? '#7B7B7B' : '#AEAEAE',
-  doveGray: darkMode ? ' #b3b3b3' : '#737373',
-  mineshaftGray: darkMode ? ' #f2f2f2' : '#2B2B2B',
-  activeGray: darkMode ? '#333333' : '#F7F8FA',
-  buttonOutlineGrey: darkMode ? '#fafafa' : '#F2F2F2',
-  tokenRowHover: darkMode ? '#262626' : '#F2F2F2',
-
-  //blacks
-  charcoalBlack: darkMode ? '#F2F2F2' : '#262626',
+  concreteGray: '#FAFAFA',
+  mercuryGray: '#E1E1E1',
+  silverGray: '#C4C4C4',
+  chaliceGray: '#AEAEAE',
+  doveGray: '#737373',
+  mineshaftGray: '#2B2B2B',
   // blues
-  zumthorBlue: darkMode ? '#262626' : '#EBF4FF',
-  malibuBlue: darkMode ? '#E6B800' : '#E6B800',
-  royalBlue: darkMode ? '#E6B800' : '#E6B800',
-  loadingBlue: darkMode ? '#666666' : '#666666',
-
+  zumthorBlue: '#EBF4FF',
+  malibuBlue: '#5CA2FF',
+  royalBlue: '#2F80ED',
   // purples
-  wisteriaPurple: '#E6B800',
+  wisteriaPurple: '#DC6BE5',
   // reds
-  salmonRed: '#ffcc66',
+  salmonRed: '#FF6871',
   // orange
-  pizazzOrange: '#B38F00',
+  pizazzOrange: '#FF8F05',
   // yellows
-  warningYellow: '#ffd633',
+  warningYellow: '#FFE270',
   // pink
-  uniswapPink: '#E6B800',
-  //green
+  uniswapPink: '#DC6BE5',
   connectedGreen: '#27AE60',
-
-  //branded
-  metaMaskOrange: '#CCA300',
-
-  //specific
-  textHover: darkMode ? theme.uniswapPink : theme.doveGray,
-
-  // connect button when loggedout
-  buttonFaded: darkMode ? '#E6B800' : '#737373',
-
   // media queries
   mediaWidth: mediaWidthTemplates,
+  mediaHeight: mediaHeightTemplates,
   // css snippets
-  flexColumnNoWrap: css`
-    display: flex;
-    flex-flow: column nowrap;
-  `,
-  flexRowNoWrap: css`
-    display: flex;
-    flex-flow: row nowrap;
-  `
-})
+  flexColumnNoWrap,
+  flexRowNoWrap
+}
+
+export default function ThemeProvider({ children }) {
+  return <StyledComponentsThemeProvider theme={theme}>{children}</StyledComponentsThemeProvider>
+}
 
 export const GlobalStyle = createGlobalStyle`
   @import url('https://rsms.me/inter/inter.css');
@@ -119,24 +85,20 @@ export const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
     padding: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;    
-  }
-
-  body > div {
-    height: 100%;
-    overflow: auto;
-    -webkit-overflow-scrolling: touch;
-}
-
-  html {
     font-size: 16px;
     font-variant: none;
-    color: ${({ theme }) => theme.textColor};
-    background-color: ${({ theme }) => theme.backgroundColor};
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  }
+
+  #root {
+    ${({ theme }) => theme.flexColumnNoWrap}
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 `
