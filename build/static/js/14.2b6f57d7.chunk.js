@@ -1,0 +1,2 @@
+(this["webpackJsonpnordicenergy-niswap"]=this["webpackJsonpnordicenergy-niswap"]||[]).push([[14],{915:function(n,r,a){"use strict";a.r(r),a.d(r,"default",(function(){return c}));var e=a(0),i=a.n(e),t=a(841);function c(n){var r=n.initialCurrency,a=n.params;return i.a.createElement(t.a,{initialCurrency:r,params:a})}}}]);
+//# sourceMappingURL=14.2b6f57d7.chunk.js.map
