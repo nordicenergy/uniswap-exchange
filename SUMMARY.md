@@ -10,7 +10,7 @@
 * [Data](sdk-documentation/data.md)
 * [Computation](sdk-documentation/computation.md)
 * [Format](sdk-documentation/format.md)
-* [Orchestration](sdk-documentation/orchastration.md)
+* [Orchestration](sdk-documentation/orchestration.md)
 * [Transact](sdk-documentation/transact.md)
 * [Types](sdk-documentation/types.md)
 
@@ -25,7 +25,7 @@
 
 ## Smart Contract Interaction
 
-* [Smart Contract Interface](smart-contract-interaction/endpoints.md)
+* [Smart Contract Interface](smart-contract-interaction/smart-contract-interface.md)
 
 ## Smart Contract API
 
