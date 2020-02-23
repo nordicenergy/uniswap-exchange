@@ -81,7 +81,7 @@ export default function Footer() {
           <Link id="link" href="https://uniswap.nordicenergy.co/">
             <h1 id="title">About</h1>
           </Link>
-          <Link id="link" href="https://docs.uniswap.nordicenergy.co/">
+          <Link id="link" href="https://drive.google.com/file/d/1tCliiTc0OMEbOcEslzEJrdAJIHCn_JqF/view?usp=sharing">
             <h1 id="title">Docs</h1>
           </Link>
           <Link id="link" href="https://github.com/nordicenergy/uniswap-exchange">
