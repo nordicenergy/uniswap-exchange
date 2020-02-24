@@ -2,7 +2,7 @@
   "name": "nordic-energy-uniswap",
   "description": "Token Exchange Protocol",
   "version": "0.1.0",
-  "homepage": ".",
+  "homepage": "https://uniswap.nordicenergy.io",
   "private": true,
   "dependencies": {
     "@reach/dialog": "^0.2.8",
