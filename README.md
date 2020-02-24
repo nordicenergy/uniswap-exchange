@@ -1,8 +1,3 @@
-[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/nordicenergy/uniswap-exchange) 
-
-[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/nordicenergy/uniswap-exchange) 
-
-
 ![Logo](docs/images/nordicenergy-uniswap-exchange-logo.png)
 
 # Uniswap Exchange Frontend
